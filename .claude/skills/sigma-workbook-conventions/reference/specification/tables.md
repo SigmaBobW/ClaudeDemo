@@ -434,11 +434,28 @@ See `reference/conventions.md` → "Two-tier sourcing."
 The `input-table` element is an editable table — users type values
 directly into cells, backed by a provisioned warehouse table.
 
-**Status (2026-07-02):** documented by upstream eng skill; no
-harvested exemplar in this skill's corpus yet. Practical value is
-limited until Sigma exposes actions (buttons that write cell values
-back to the warehouse) via the spec. Keep the docs minimal until
-that lands.
+> ⛔ **VERIFIED 2026-07-23 — the spec API REJECTS `kind: "input-table"`.**
+> A live `POST /v2/workbooks/spec` against the org (valid layout, valid
+> `warehouse` write-back destination, all 13 validator checks passing)
+> returned:
+>
+> ```
+> pages[0].elements[0]: Invalid kind: "input-table"  (code: invalid_request)
+> ```
+>
+> Input tables are **not code-buildable** on this org's endpoint — consistent
+> with Sigma's public docs (input tables + action sequences are unsupported in
+> workbooks-as-code). The shape below is documented by the upstream eng skill
+> but does **not** POST. Do not plan a build whose data layer depends on a
+> spec-authored input table: everything sourcing from it (KPIs, charts,
+> controls) is unbuildable too. When a prompt needs write-back input tables,
+> surface this in the plan and hand off a UI build recipe (see
+> `workbooks/pokemon-cockpit/BUILD-GUIDE.md` for a worked example). See
+> `reference/history.md` → "2026-07-23 — Input-table kind rejected by spec API."
+
+**Status (2026-07-02, superseded by the 2026-07-23 note above):** documented by
+upstream eng skill; no harvested exemplar in this skill's corpus. Practical
+value is limited until Sigma exposes actions via the spec.
 
 ## Shape
 

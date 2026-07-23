@@ -17,6 +17,30 @@ to flag "this rule was once unverified and bit us — treat it as load-bearing."
 > if you need the current rule wording. See the migration commits
 > (`e0eec01`–`c765c1d`) for the full mapping.
 
+## 2026-07-23 — Input-table kind rejected by spec API
+
+Build ask: a Pokémon-card-collection tracker ("Pokémon Cockpit") with Snowflake
+write-back input tables, an add-card modal, and governed dropdowns. During
+plan-time recon, a minimal probe workbook — one `kind: "input-table"` element
+with a valid `warehouse` write-back destination
+(`SE_DEMO_DB.PAPERCRANE_WRITE`), a valid single-element layout, and all 13
+`validate-spec.py` checks passing — was POSTed to `/v2/workbooks/spec`. The API
+rejected it:
+
+```
+pages[0].elements[0]: Invalid kind: "input-table"  (code: invalid_request)
+```
+
+This is the first **live** test of the input-table element in this skill's
+corpus, and it confirms input tables are **not code-buildable** on this org's
+endpoint (matching Sigma's public docs, which list input tables + action
+sequences as unsupported in workbooks-as-code). Because the whole app's data
+layer (KPIs, charts, controls) sources from the input table, code-first
+delivery was not viable. Outcome: delivered a full UI build guide +
+CSV-seeded reference tables under `workbooks/pokemon-cockpit/`. The probe POST
+failed cleanly, so no workbook was created. Rule promoted to
+`reference/specification/tables.md` → "Input tables."
+
 ## 2026-05-11 — Per-page `layout` field silently discarded
 
 POSTing a workbook spec with `layout` placed under `pages[i]` (rather than at
