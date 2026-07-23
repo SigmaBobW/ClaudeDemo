@@ -2,6 +2,9 @@
 .env
 .env.*.local
 
+# Session scratch (temporary probe/working files)
+scratchpad/
+
 # Personal Claude Code settings (per-user)
 .claude/settings.local.json
 
