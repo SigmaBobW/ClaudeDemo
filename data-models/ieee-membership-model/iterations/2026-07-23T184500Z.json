@@ -1,0 +1,47 @@
+{
+  "name": "IEEE Membership Model",
+  "description": "IEEE memberships joined to Active contacts. memberships = t_memberships_subscriptions_data (dp_it_views, raw). active_contacts = contact (dp_it) filtered to status_description = 'Active'. membership_detail = memberships LEFT JOIN active_contacts on contact_id = customer_number (keeps all memberships).",
+  "schemaVersion": 1,
+  "folderId": "03308095-2e57-4967-9127-9b31e83a6634",
+  "pages": [
+    {
+      "id": "page-model",
+      "name": "Model",
+      "elements": [
+        {
+          "id": "memberships",
+          "kind": "table",
+          "name": "Memberships",
+          "source": {
+            "kind": "warehouse-table",
+            "connectionId": "41e2542e-133f-4d7d-aaa5-5b5416a23045",
+            "path": ["dp_it_catalog", "dp_it_views", "t_memberships_subscriptions_data"]
+          },
+          "columns": []
+        },
+        {
+          "id": "active-contacts",
+          "kind": "table",
+          "name": "Active Contacts",
+          "source": {
+            "kind": "sql",
+            "connectionId": "41e2542e-133f-4d7d-aaa5-5b5416a23045",
+            "statement": "SELECT * FROM dp_it_catalog.dp_it.contact WHERE status_description = 'Active'"
+          },
+          "columns": []
+        },
+        {
+          "id": "membership-detail",
+          "kind": "table",
+          "name": "Membership Detail",
+          "source": {
+            "kind": "sql",
+            "connectionId": "41e2542e-133f-4d7d-aaa5-5b5416a23045",
+            "statement": "SELECT m.*, c.* FROM dp_it_catalog.dp_it_views.t_memberships_subscriptions_data m LEFT JOIN (SELECT * FROM dp_it_catalog.dp_it.contact WHERE status_description = 'Active') c ON m.contact_id = c.customer_number"
+          },
+          "columns": []
+        }
+      ]
+    }
+  ]
+}
